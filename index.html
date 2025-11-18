@@ -4,9 +4,85 @@
 <head>
     <title>Simple AR - A Web based AR for A-Frame</title>
     <script src="aframe-v1.5.0.min.js"></script>
+    <style>
+        .countdown-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 1000;
+        }
+        
+        .countdown-title {
+            color: #ff6b6b;
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+        }
+        
+        .countdown-timer {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .timer-unit {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .timer-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+        
+        .timer-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #ffffff;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Countdown Container -->
+    <div class="countdown-container">
+        <div class="countdown-title">⛄ Tage bis Weihnachten ⛄</div>
+        <div id="countdown" class="countdown-timer">
+            <div class="timer-unit">
+                <div class="timer-number" id="days">00</div>
+                <div class="timer-label">Tage</div>
+            </div>
+            <div class="timer-unit">
+                <div class="timer-number" id="hours">00</div>
+                <div class="timer-label">Stunden</div>
+            </div>
+            <div class="timer-unit">
+                <div class="timer-number" id="minutes">00</div>
+                <div class="timer-label">Minuten</div>
+            </div>
+            <div class="timer-unit">
+                <div class="timer-number" id="seconds">00</div>
+                <div class="timer-label">Sekunden</div>
+            </div>
+        </div>
+    </div>
+
     <script src="simple-ar.min.js" onload="onWasmLoaded();"></script>
     <a-scene>
         <a-entity simple-ar="src: Foto.png; minCutOffValue: 1; betaValue:0.1;">
@@ -15,11 +91,48 @@
         <a-camera position="0 0 0"></a-camera>
     </a-scene>
 
-    
     <script>
+        // Countdown Timer Funktion
+        function updateCountdown() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let targetDate = new Date(currentYear, 11, 24); // 24. Dezember dieses Jahres
+            
+            // Wenn der 24. Dezember bereits vorbei ist, nächstes Jahr anzeigen
+            if (now > targetDate) {
+                targetDate = new Date(currentYear + 1, 11, 24);
+            }
+            
+            const timeDifference = targetDate - now;
+            
+            if (timeDifference <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                
+                // Titel ändern, wenn Weihnachten da ist
+                document.querySelector('.countdown-title').textContent = '🎄 Frohe Weihnachten! 🎄';
+                return;
+            }
+            
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+        
+        // Timer starten
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
+        // Schnee-Animation Code (ursprünglicher Code)
         const targetObject = document.querySelector('#snow');
-
 
         for (let i = 0; i < 100; i++) {
             const plane = document.createElement('a-plane');
