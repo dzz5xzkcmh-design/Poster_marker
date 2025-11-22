@@ -172,8 +172,8 @@
     <a-scene>
         <a-entity simple-ar="src: Foto.png; minCutOffValue: 1; betaValue:0.1;">
             <a-entity id="snow"></a-entity>
-            <!-- Tanzender Schneemann -->
-            <a-entity id="snowman" position="0 0.5 -2" scale="0.8 0.8 0.8" visible="true">
+            <!-- Tanzender Schneemann - ZENTRIERT und näher an der Kamera -->
+            <a-entity id="snowman" position="0 0 -1.5" scale="0.6 0.6 0.6" visible="true">
                 <!-- Unterer Schneeball -->
                 <a-sphere position="0 0.5 0" radius="0.4" color="#FFFFFF" roughness="0.3"></a-sphere>
                 <!-- Mittlerer Schneeball -->
@@ -213,9 +213,9 @@
                 
                 <!-- Tanz-Animationen -->
                 <a-animation attribute="rotation" dur="2000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
-                <a-animation attribute="position" dur="3000" from="0 0.5 -2" to="1 0.5 -2" 
+                <a-animation attribute="position" dur="3000" from="0 0 -1.5" to="0.8 0 -1.5" 
                            direction="alternate" repeat="indefinite" easing="easeInOutSine"></a-animation>
-                <a-animation attribute="scale" dur="1500" from="0.8 0.8 0.8" to="0.85 0.85 0.85" 
+                <a-animation attribute="scale" dur="1500" from="0.6 0.6 0.6" to="0.65 0.65 0.65" 
                            direction="alternate" repeat="indefinite" easing="easeInOutSine"></a-animation>
             </a-entity>
         </a-entity>
@@ -249,8 +249,8 @@
                 const snowman = document.getElementById('snowman');
                 snowman.setAttribute('animation__jump', {
                     property: 'position',
-                    from: '0 0.5 -2',
-                    to: '0 1.0 -2',
+                    from: '0 0 -1.5',
+                    to: '0 0.5 -1.5',
                     dur: 500,
                     direction: 'alternate',
                     repeat: 'indefinite'
@@ -304,16 +304,16 @@
                 // Aufgeregter Tanz - nur noch wenige Tage
                 snowman.setAttribute('animation__excited', {
                     property: 'position',
-                    from: '0 0.5 -2',
-                    to: '0 0.7 -2',
+                    from: '0 0 -1.5',
+                    to: '0 0.2 -1.5',
                     dur: 300,
                     direction: 'alternate',
                     repeat: 'indefinite',
                     easing: 'easeInOutBack'
                 });
             } else if (days <= 10) {
-                // Mittlerer Tanz
-                snowman.setAttribute('scale', '0.9 0.9 0.9');
+                // Mittlerer Tanz - etwas größer
+                snowman.setAttribute('scale', '0.7 0.7 0.7');
             }
         }
         
@@ -398,6 +398,13 @@
                 snowman.removeAttribute('animation__click');
             }, 600);
         });
+
+        // Automatische Positionierung nach AR-Erkennung
+        setTimeout(() => {
+            const snowman = document.getElementById('snowman');
+            // Sicherstellen, dass der Schneemann sichtbar ist
+            snowman.setAttribute('visible', 'true');
+        }, 2000);
     </script>
 </body>
 
