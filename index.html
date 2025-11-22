@@ -8,7 +8,7 @@
     <style>
         .countdown-container {
             position: fixed;
-            top: 10px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -71,7 +71,7 @@
         /* Portrait Mode Optimierungen */
         @media (orientation: portrait) and (max-height: 700px) {
             .countdown-container {
-                top: 5px;
+                bottom: 5px;
             }
             
             .countdown-title {
@@ -95,7 +95,7 @@
         /* Landscape Mode Optimierungen */
         @media (orientation: landscape) and (max-height: 500px) {
             .countdown-container {
-                top: 5px;
+                bottom: 5px;
                 width: 90%;
                 max-width: 500px;
             }
@@ -173,7 +173,7 @@
         <a-entity simple-ar="src: Foto.png; minCutOffValue: 1; betaValue:0.1;">
             <a-entity id="snow"></a-entity>
             <!-- Tanzender Schneemann - ZENTRIERT und näher an der Kamera -->
-            <a-entity id="snowman" position="0 -20 -5" scale="0.6 0.6 0.6" visible="true">
+            <a-entity id="snowman" position="0 0 -3" scale="0.8 0.8 0.8" visible="true">
                 <!-- Unterer Schneeball -->
                 <a-sphere position="0 0.5 0" radius="0.4" color="#FFFFFF" roughness="0.3"></a-sphere>
                 <!-- Mittlerer Schneeball -->
@@ -213,9 +213,9 @@
                 
                 <!-- Tanz-Animationen -->
                 <a-animation attribute="rotation" dur="2000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
-                <a-animation attribute="position" dur="3000" from="0 0 -1.5" to="0.8 0 -1.5" 
+                <a-animation attribute="position" dur="3000" from="0 0 -3" to="0.8 0 -3" 
                            direction="alternate" repeat="indefinite" easing="easeInOutSine"></a-animation>
-                <a-animation attribute="scale" dur="1500" from="0.6 0.6 0.6" to="0.65 0.65 0.65" 
+                <a-animation attribute="scale" dur="1500" from="0.8 0.8 0.8" to="0.85 0.85 0.85" 
                            direction="alternate" repeat="indefinite" easing="easeInOutSine"></a-animation>
             </a-entity>
         </a-entity>
@@ -249,8 +249,8 @@
                 const snowman = document.getElementById('snowman');
                 snowman.setAttribute('animation__jump', {
                     property: 'position',
-                    from: '0 0 -1.5',
-                    to: '0 0.5 -1.5',
+                    from: '0 0 -3',
+                    to: '0 0.5 -3',
                     dur: 500,
                     direction: 'alternate',
                     repeat: 'indefinite'
@@ -304,8 +304,8 @@
                 // Aufgeregter Tanz - nur noch wenige Tage
                 snowman.setAttribute('animation__excited', {
                     property: 'position',
-                    from: '0 0 -1.5',
-                    to: '0 0.2 -1.5',
+                    from: '0 0 -3',
+                    to: '0 0.2 -3',
                     dur: 300,
                     direction: 'alternate',
                     repeat: 'indefinite',
@@ -313,7 +313,7 @@
                 });
             } else if (days <= 10) {
                 // Mittlerer Tanz - etwas größer
-                snowman.setAttribute('scale', '0.7 0.7 0.7');
+                snowman.setAttribute('scale', '0.9 0.9 0.9');
             }
         }
         
