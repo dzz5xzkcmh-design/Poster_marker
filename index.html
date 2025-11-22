@@ -172,6 +172,52 @@
     <a-scene>
         <a-entity simple-ar="src: Foto.png; minCutOffValue: 1; betaValue:0.1;">
             <a-entity id="snow"></a-entity>
+            <!-- Tanzender Schneemann -->
+            <a-entity id="snowman" position="0 0.5 -2" scale="0.8 0.8 0.8" visible="true">
+                <!-- Unterer Schneeball -->
+                <a-sphere position="0 0.5 0" radius="0.4" color="#FFFFFF" roughness="0.3"></a-sphere>
+                <!-- Mittlerer Schneeball -->
+                <a-sphere position="0 1.2 0" radius="0.3" color="#FFFFFF" roughness="0.3"></a-sphere>
+                <!-- Oberer Schneeball -->
+                <a-sphere position="0 1.8 0" radius="0.2" color="#FFFFFF" roughness="0.3"></a-sphere>
+                
+                <!-- Augen -->
+                <a-sphere position="-0.05 1.85 0.18" radius="0.02" color="#000000"></a-sphere>
+                <a-sphere position="0.05 1.85 0.18" radius="0.02" color="#000000"></a-sphere>
+                
+                <!-- Nase (Karotte) -->
+                <a-cone position="0 1.8 0.2" radius-bottom="0.02" radius-top="0.01" height="0.1" 
+                       color="#FF8C00" rotation="-30 0 0"></a-cone>
+                
+                <!-- Mund -->
+                <a-entity position="0 1.75 0.18" rotation="0 0 0">
+                    <a-sphere position="-0.03 0 0" radius="0.01" color="#000000"></a-sphere>
+                    <a-sphere position="0 0 0" radius="0.01" color="#000000"></a-sphere>
+                    <a-sphere position="0.03 0 0" radius="0.01" color="#000000"></a-sphere>
+                </a-entity>
+                
+                <!-- Hut -->
+                <a-cylinder position="0 2.0 0" radius="0.15" height="0.08" color="#000000" 
+                           open-ended="true"></a-cylinder>
+                <a-cylinder position="0 1.92 0" radius="0.25" height="0.03" color="#000000"></a-cylinder>
+                
+                <!-- Arme -->
+                <a-cylinder id="left-arm" position="-0.35 1.2 0" radius="0.02" height="0.4" 
+                           color="#8B4513" rotation="0 0 -30"></a-cylinder>
+                <a-cylinder id="right-arm" position="0.35 1.2 0" radius="0.02" height="0.4" 
+                           color="#8B4513" rotation="0 0 30"></a-cylinder>
+                
+                <!-- Schal -->
+                <a-torus position="0 1.35 0" arc="360" radius="0.32" radius-tubular="0.02" 
+                        color="#FF0000" rotation="90 0 0"></a-torus>
+                
+                <!-- Tanz-Animationen -->
+                <a-animation attribute="rotation" dur="2000" to="0 360 0" repeat="indefinite" easing="linear"></a-animation>
+                <a-animation attribute="position" dur="3000" from="0 0.5 -2" to="1 0.5 -2" 
+                           direction="alternate" repeat="indefinite" easing="easeInOutSine"></a-animation>
+                <a-animation attribute="scale" dur="1500" from="0.8 0.8 0.8" to="0.85 0.85 0.85" 
+                           direction="alternate" repeat="indefinite" easing="easeInOutSine"></a-animation>
+            </a-entity>
         </a-entity>
         <a-camera position="0 0 0"></a-camera>
     </a-scene>
@@ -198,6 +244,17 @@
                 
                 // Titel ändern, wenn Weihnachten da ist
                 document.querySelector('.countdown-title').textContent = '🎄 Frohe Weihnachten! 🎄';
+                
+                // Spezial-Animation für Weihnachten
+                const snowman = document.getElementById('snowman');
+                snowman.setAttribute('animation__jump', {
+                    property: 'position',
+                    from: '0 0.5 -2',
+                    to: '0 1.0 -2',
+                    dur: 500,
+                    direction: 'alternate',
+                    repeat: 'indefinite'
+                });
                 return;
             }
             
@@ -210,6 +267,54 @@
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Spezielle Animationen basierend auf verbleibenden Tagen
+            updateSnowmanAnimation(days);
+        }
+        
+        // Schneemann-Animation basierend auf Tagen bis Weihnachten
+        function updateSnowmanAnimation(days) {
+            const leftArm = document.getElementById('left-arm');
+            const rightArm = document.getElementById('right-arm');
+            const snowman = document.getElementById('snowman');
+            
+            // Arme bewegen - Winken-Animation
+            leftArm.setAttribute('animation', {
+                property: 'rotation',
+                from: '0 0 -30',
+                to: '0 0 -60',
+                dur: 800,
+                direction: 'alternate',
+                repeat: 'indefinite',
+                easing: 'easeInOutSine'
+            });
+            
+            rightArm.setAttribute('animation', {
+                property: 'rotation',
+                from: '0 0 30',
+                to: '0 0 60',
+                dur: 800,
+                direction: 'alternate',
+                repeat: 'indefinite',
+                easing: 'easeInOutSine'
+            });
+            
+            // Verschiedene Tanzstile basierend auf Tagen
+            if (days <= 3) {
+                // Aufgeregter Tanz - nur noch wenige Tage
+                snowman.setAttribute('animation__excited', {
+                    property: 'position',
+                    from: '0 0.5 -2',
+                    to: '0 0.7 -2',
+                    dur: 300,
+                    direction: 'alternate',
+                    repeat: 'indefinite',
+                    easing: 'easeInOutBack'
+                });
+            } else if (days <= 10) {
+                // Mittlerer Tanz
+                snowman.setAttribute('scale', '0.9 0.9 0.9');
+            }
         }
         
         // Timer starten
@@ -273,6 +378,26 @@
 
             targetObject.appendChild(plane);
         }
+        
+        // Interaktion mit dem Schneemann
+        document.addEventListener('click', function() {
+            const snowman = document.getElementById('snowman');
+            
+            // Kurzer Sprung beim Klick
+            snowman.setAttribute('animation__click', {
+                property: 'position',
+                from: snowman.getAttribute('position'),
+                to: `${snowman.object3D.position.x} ${snowman.object3D.position.y + 0.3} ${snowman.object3D.position.z}`,
+                dur: 300,
+                direction: 'alternate',
+                easing: 'easeOutQuad'
+            });
+            
+            // Animation nach kurzer Zeit entfernen
+            setTimeout(() => {
+                snowman.removeAttribute('animation__click');
+            }, 600);
+        });
     </script>
 </body>
 
